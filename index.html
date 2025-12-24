@@ -3,18 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Antares Campana | Experiencia Total</title>
+  <title>Antares Campana | Catálogo Profesional</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
       --gold: #d4af37;
       --dark-bg: #0a0a0b;
-      --wood-dark: #2b1d1a;
-      --chalk-white: #f5f5f5;
-      --chalk-yellow: #fdf08c;
+      --card-bg: rgba(255, 255, 255, 0.03);
       --border: rgba(212, 175, 55, 0.3);
       --success: #10b981;
       --error: #ef4444;
@@ -33,12 +31,7 @@
     /* --- BACKGROUND & VIDEO --- */
     #bg-video {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      object-fit: cover; z-index: -4; filter: brightness(0.4);
-    }
-    
-    #canvas-bubbles {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      z-index: -3; pointer-events: none;
+      object-fit: cover; z-index: -4; filter: brightness(0.3);
     }
 
     /* --- TOP BAR & CLOCK --- */
@@ -49,94 +42,121 @@
       background: rgba(10, 10, 11, 0.95); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-
-    .live-clock { color: var(--gold); font-weight: 800; letter-spacing: 2px; text-align: center; }
-
+    .live-clock { color: var(--gold); font-weight: 800; letter-spacing: 2px; text-align: center; font-size: 0.9rem; }
     .top-btn {
       background: rgba(255,255,255,0.05); border: 1px solid var(--border);
       color: #fff; padding: 8px 18px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;
       cursor: pointer; transition: 0.3s; text-decoration: none;
     }
-    .top-btn:hover { background: var(--gold); color: #000; }
 
     /* --- HEADER & STATUS --- */
     header {
       position: sticky; top: 60px; z-index: 100;
-      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
       padding: 1rem 2rem; border-bottom: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
     }
     .brand { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; }
     .brand span { color: var(--gold); }
     
-    .status-badge { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 6px 15px; border-radius: 20px; border: 1px solid var(--border); font-weight: bold; }
+    .status-badge { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 6px 15px; border-radius: 20px; border: 1px solid var(--border); }
     .led { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
     .led.green { background: var(--success); box-shadow: 0 0 10px var(--success); }
     .led.red { background: var(--error); box-shadow: 0 0 10px var(--error); }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* --- HERO & MANIFESTO --- */
-    .hero { height: 60vh; display: flex; align-items: center; padding: 2rem; }
-    .manifesto {
-      max-width: 700px; border-left: 4px solid var(--gold);
-      background: rgba(0,0,0,0.8); padding: 2rem; backdrop-filter: blur(10px);
-      animation: slideOut 1.5s ease-in-out 6s forwards;
+    /* --- CATALOGO DE TARJETAS TECNICAS --- */
+    .catalog-section { padding: 5rem 1.5rem; max-width: 1400px; margin: 0 auto; }
+    .catalog-title { text-align: center; margin-bottom: 4rem; }
+    .catalog-title h2 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #fff; margin-bottom: 0.5rem; }
+    .catalog-title p { color: var(--gold); letter-spacing: 3px; font-weight: 600; font-size: 0.8rem; }
+
+    .grid-beers {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
     }
-    @keyframes slideOut { to { transform: translateX(150%); opacity: 0; } }
 
-    /* --- SECCIÓN PIZARRA --- */
-    .pizarra-section {
-      background: #111 url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
-      padding: 5rem 1rem; border-top: 12px solid var(--wood-dark); border-bottom: 12px solid var(--wood-dark);
+    .beer-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(15px);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .pizarra-header { text-align: center; margin-bottom: 4rem; }
-    .pizarra-header h2 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--chalk-white); }
-    .pizarra-header p { font-family: 'Permanent Marker', cursive; color: var(--gold); font-size: 1.5rem; }
-
-    .pizarra-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1300px; margin: 0 auto; }
-    
-    .pizarra-item {
-      background: #1a1a1c url('https://www.transparenttextures.com/patterns/black-chalkboard.png');
-      border: 8px solid var(--wood-dark); padding: 2rem; position: relative; transition: 0.4s;
+    .beer-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.06);
     }
-    .pizarra-item:hover { transform: translateY(-10px) rotate(1deg); }
 
-    .pizarra-img-container { height: 180px; display: flex; justify-content: center; margin-bottom: 1.5rem; }
-    .pizarra-img-container img { height: 100%; object-fit: contain; filter: drop-shadow(0 10px 15px #000); }
+    .beer-img {
+      width: 100%;
+      height: 250px;
+      object-fit: contain;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));
+    }
 
-    .pizarra-title { font-family: 'Permanent Marker', cursive; font-size: 2rem; color: var(--chalk-yellow); }
-    .pizarra-desc { font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 0.9rem; margin: 15px 0; min-height: 50px; }
-    
-    .pizarra-tech { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
-    .tech-label { font-family: 'Permanent Marker', cursive; font-size: 0.7rem; color: var(--gold); display: block; }
-    .tech-value { font-family: 'Permanent Marker', cursive; font-size: 1.3rem; color: var(--chalk-white); }
+    .beer-category {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+    }
 
-    /* --- FORMULARIO DE RESERVAS --- */
-    .form-section { padding: 5rem 1.5rem; max-width: 800px; margin: 0 auto; }
-    .form-wrapper { background: rgba(10, 10, 15, 0.9); padding: 3rem; border-radius: 20px; border: 1px solid var(--border); backdrop-filter: blur(15px); }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .full { grid-column: 1 / -1; }
-    input, select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; padding: 1rem; border-radius: 8px; }
-    .btn-submit { background: var(--gold); color: #000; border: none; padding: 1rem; font-weight: 800; width: 100%; border-radius: 50px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-    .btn-submit:hover { background: #fff; box-shadow: 0 0 20px var(--gold); }
+    .beer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
 
-    /* --- DOCK & AGE GATE --- */
-    .bottom-dock { position: fixed; bottom: 0; width: 100%; background: rgba(10,10,11,0.95); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 1900; border-top: 1px solid var(--border); }
+    .beer-desc {
+      font-size: 0.85rem;
+      color: #ccc;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      min-height: 60px;
+    }
+
+    /* Ficha Técnica Profesional */
+    .tech-sheet {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      padding-top: 1.5rem;
+    }
+    .tech-item { text-align: center; }
+    .tech-label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 5px; }
+    .tech-value { font-size: 1.2rem; color: #fff; font-weight: 700; }
+
+    /* --- FORMULARIO & OTROS (SE MANTIENEN) --- */
+    .form-wrapper { background: rgba(0,0,0,0.8); padding: 3rem; border-radius: 20px; border: 1px solid var(--border); max-width: 800px; margin: 4rem auto; }
     #age-gate { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    .btn-age { padding: 15px 35px; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-weight: 800; cursor: pointer; border-radius: 50px; }
-
-    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .top-bar { padding: 0 10px; } }
+    .btn-age { padding: 15px 40px; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-weight: 800; cursor: pointer; border-radius: 50px; }
   </style>
 </head>
 <body>
 
-  <canvas id="canvas-bubbles"></canvas>
   <video id="bg-video" autoplay muted loop playsinline><source src="VIDEO ANTARES.mp4" type="video/mp4"></video>
 
   <div id="age-gate">
-    <img src="ANTARES FOTOGRAMA2.png" style="width:200px; margin-bottom: 2rem;">
-    <h2 style="font-family:'Playfair Display'; color: var(--gold); margin-bottom: 2rem;">¿ERES MAYOR DE EDAD?</h2>
-    <button class="btn-age" onclick="entrar()">SÍ, SOY MAYOR</button>
+    <img src="ANTARES FOTOGRAMA2.png" style="width:180px; margin-bottom: 2rem;">
+    <h2 style="font-family:'Playfair Display'; color: #fff; margin-bottom: 2rem;">¿ERES MAYOR DE EDAD?</h2>
+    <button class="btn-age" onclick="entrar()">SÍ, CONFIRMO</button>
   </div>
 
   <audio id="bg-music" loop><source src="Neon Currents.mp3" type="audio/mpeg"></audio>
@@ -155,103 +175,72 @@
     </div>
   </header>
 
-  <div class="hero">
-    <div class="manifesto">
-      <h2 style="font-family:'Playfair Display'; font-size: 2rem; margin-bottom: 1rem;">Cerveza Artesanal de Verdad.</h2>
-      <p>27 años de pasión por el lúpulo y la cultura cervecera. Bienvenidos a nuestra casa en Campana.</p>
+  <section class="catalog-section">
+    <div class="catalog-title">
+      <h2>Nuestras Cervezas</h2>
+      <p>FICHA TÉCNICA OFICIAL</p>
     </div>
-  </div>
-
-  <section class="pizarra-section" id="productos">
-    <div class="pizarra-header">
-      <h2 id="hh-label">Nuestras Canillas</h2>
-      <p>Directo de Fábrica</p>
-    </div>
-    <div class="pizarra-grid" id="pizarra-container"></div>
+    <div class="grid-beers" id="beer-grid">
+      </div>
   </section>
 
-  <section class="form-section">
-    <div class="form-wrapper">
-      <h2 style="text-align:center; font-family:'Playfair Display'; color:var(--gold); margin-bottom:2rem;">Reserva tu Mesa</h2>
-      <form id="reserva-form">
-        <div class="form-grid">
-          <input type="text" id="nombre" placeholder="Nombre Completo" required class="full">
-          <input type="tel" id="celular" placeholder="WhatsApp" required class="full">
-          <input type="date" id="fecha" required>
-          <select id="hora" required></select>
-          <select id="ubicacion" class="full">
-            <option>Patio Trasero 🌳</option>
-            <option>Salón Interior 🏠</option>
-            <option>Vereda 🍻</option>
-          </select>
-          <button type="submit" class="btn-submit full">RESERVAR POR WHATSAPP 📲</button>
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <div class="bottom-dock">
-    <a href="#" style="color:var(--gold); text-decoration:none; font-weight:800;">📍 Cómo llegar</a>
-    <div style="display:flex; gap:15px;">
-      <span style="font-size:0.8rem; opacity:0.6;">IG: @antares_campana</span>
-    </div>
+  <div class="form-wrapper">
+    <h2 style="text-align:center; font-family:'Playfair Display'; color:var(--gold); margin-bottom:2rem;">Reserva de Mesa</h2>
+    <form id="reserva-form" style="display:grid; gap:15px;">
+      <input type="text" id="nombre" placeholder="Nombre" required style="padding:1rem; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid #333; color:#fff;">
+      <input type="date" id="fecha" required style="padding:1rem; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid #333; color:#fff;">
+      <button type="submit" style="padding:1rem; background:var(--gold); border:none; border-radius:50px; font-weight:800; cursor:pointer;">ENVIAR WHATSAPP</button>
+    </form>
   </div>
 
   <script>
-    // --- LÓGICA DE TIEMPO Y ESTADO ---
-    function updateStatus() {
-      const now = new Date();
-      const h = now.getHours();
-      const d = now.getDay();
-      document.getElementById('liveClock').innerText = now.toLocaleTimeString();
-
-      const isOpen = (h >= 16 || h < 4);
-      const led = document.getElementById('statusLed');
-      const txt = document.getElementById('statusText');
-      
-      led.className = isOpen ? "led green" : "led red";
-      txt.innerText = isOpen ? "ABIERTO" : "CERRADO";
-      txt.style.color = isOpen ? "var(--success)" : "var(--error)";
-
-      // Happy Hour Check
-      const hhLabel = document.getElementById('hh-label');
-      if (h >= 16 && h < 20) {
-        hhLabel.innerHTML = "⚡ HAPPY HOUR ACTIVO ⚡";
-        hhLabel.style.color = "var(--gold)";
-      }
-    }
-
-    // --- CARGA DE PIZARRA ---
     const beers = [
-      { name: "KÖLSCH", cat: "Suave", desc: "Dorada y refrescante.", ibu: "22", abv: "5.0", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/kolsch-473ml-lata.png" },
-      { name: "SCOTCH", cat: "Maltosa", desc: "Dulce con notas a caramelo.", ibu: "18", abv: "6.0", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/scotch-473ml.png" },
-      { name: "IPA", cat: "Lupulada", desc: "Amargor intenso y cítrico.", ibu: "58", abv: "6.6", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/ipa-473ml-lata.png" },
-      { name: "HONEY", cat: "Especial", desc: "Suave con miel pura.", ibu: "22", abv: "7.5", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/honey-beer-473ml.png" }
+      { name: "KÖLSCH", cat: "Clásica", desc: "Nuestra interpretación del estilo de Colonia. Refrescante, dorada y cristalina.", ibu: "22", abv: "5.0%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/kolsch-473ml-lata.png" },
+      { name: "SCOTCH", cat: "Clásica", desc: "Inspirada en las Ale de Escocia. Notas a caramelo, dulce y de cuerpo medio.", ibu: "18", abv: "6.0%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/scotch-473ml.png" },
+      { name: "IPA", cat: "Lupulada", desc: "Explosión de lúpulo americano. Amargor persistente con notas cítricas y resinosas.", ibu: "58", abv: "6.6%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/ipa-473ml-lata.png" },
+      { name: "PORTER", cat: "Clásica Negra", desc: "Malta tostada que evoca sabores a chocolate amargo y café recién molido.", ibu: "27", abv: "5.5%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/porter-473ml.png" },
+      { name: "HONEY BEER", cat: "Especial", desc: "Suave, con miel pura seleccionada que aporta un aroma floral y dulzor equilibrado.", ibu: "22", abv: "7.5%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/honey-beer-473ml.png" },
+      { name: "CARAVANA", cat: "Session IPA", desc: "Mucho carácter de lúpulo pero con bajo alcohol. Ideal para tomarse varias.", ibu: "30", abv: "4.2%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/caravana-473ml.png" },
+      { name: "CREAM STOUT", cat: "Especial Negra", desc: "Cremosa, con nitrógeno y notas a chocolate. Un postre en copa.", ibu: "22", abv: "7.0%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/cream-stout.png" }
     ];
 
-    function loadPizarra() {
-      const container = document.getElementById('pizarra-container');
+    function loadBeers() {
+      const grid = document.getElementById('beer-grid');
       beers.forEach(b => {
-        container.innerHTML += `
-          <div class="pizarra-item">
-            <div class="pizarra-img-container"><img src="${b.img}"></div>
-            <span style="color:var(--gold); font-size:0.7rem; font-weight:800;">${b.cat.toUpperCase()}</span>
-            <h3 class="pizarra-title">${b.name}</h3>
-            <p class="pizarra-desc">"${b.desc}"</p>
-            <div class="pizarra-tech">
-              <div><span class="tech-label">IBU</span><span class="tech-value">${b.ibu}</span></div>
-              <div><span class="tech-label">ABV</span><span class="tech-value">${b.abv}%</span></div>
+        grid.innerHTML += `
+          <article class="beer-card">
+            <span class="beer-category">${b.cat}</span>
+            <img src="${b.img}" class="beer-img" alt="${b.name}">
+            <h3 class="beer-name">${b.name}</h3>
+            <p class="beer-desc">${b.desc}</p>
+            <div class="tech-sheet">
+              <div class="tech-item">
+                <span class="tech-label">IBU (Amargor)</span>
+                <span class="tech-value">${b.ibu}</span>
+              </div>
+              <div class="tech-item">
+                <span class="tech-label">ABV (Alcohol)</span>
+                <span class="tech-value">${b.abv}</span>
+              </div>
             </div>
-          </div>
+          </article>
         `;
       });
     }
 
-    // --- FUNCIONES CORE ---
+    function updateStatus() {
+      const h = new Date().getHours();
+      const isOpen = (h >= 16 || h < 4);
+      document.getElementById('liveClock').innerText = new Date().toLocaleTimeString();
+      document.getElementById('statusLed').className = isOpen ? "led green" : "led red";
+      document.getElementById('statusText').innerText = isOpen ? "ABIERTO AHORA" : "CERRADO";
+      document.getElementById('statusText').style.color = isOpen ? "var(--success)" : "var(--error)";
+    }
+
     function entrar() {
       document.getElementById('age-gate').style.display = 'none';
-      const audio = document.getElementById('bg-music');
-      audio.volume = 0.2; audio.play().catch(()=>{});
+      const music = document.getElementById('bg-music');
+      music.volume = 0.2; music.play().catch(()=>{});
     }
 
     function toggleMusic() {
@@ -261,27 +250,16 @@
       else { a.pause(); btn.innerText = "SOUND OFF"; }
     }
 
-    // --- RESERVAS ---
-    document.getElementById('reserva-form').onsubmit = (e) => {
-      e.preventDefault();
-      const text = `Reserva Antares:%0ANombre: ${document.getElementById('nombre').value}%0AFecha: ${document.getElementById('fecha').value}%0AHora: ${document.getElementById('hora').value}`;
-      window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=${text}`);
-    };
-
     window.onload = () => {
-      loadPizarra();
+      loadBeers();
       updateStatus();
       setInterval(updateStatus, 1000);
-      
-      // Llenar selector de horas
-      const select = document.getElementById('hora');
-      for(let i=16; i<=23; i++) select.innerHTML += `<option>${i}:00 hs</option>`;
-      select.innerHTML += `<option>00:00 hs</option><option>01:00 hs</option>`;
     };
   </script>
 </body>
 </html>
 "commit"
+
 
 
 
