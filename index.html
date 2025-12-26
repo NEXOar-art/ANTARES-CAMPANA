@@ -12,7 +12,7 @@
     :root {
       --gold: #d4af37;
       --dark-bg: #0a0a0b;
-      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-bg: rgba(20, 20, 22, 0.85);
       --border: rgba(212, 175, 55, 0.3);
       --success: #10b981;
       --error: #ef4444;
@@ -37,75 +37,107 @@
       object-fit: cover; z-index: -4; filter: brightness(0.3);
     }
 
-    /* --- TOP BAR --- */
+    /* --- TOP BAR (Contenedor Inicial) --- */
     .top-bar {
       position: fixed; top: 0; width: 100%; height: 60px;
       display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
       padding: 0 40px; z-index: 2000;
-      background: rgba(10, 10, 11, 0.95); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(10, 10, 11, 0.0); /* Transparente al inicio para fusionar */
+      backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+      transition: all 1s ease;
     }
-    .live-clock { color: var(--gold); font-weight: 800; letter-spacing: 2px; text-align: center; font-size: 0.9rem; }
+
+    .live-clock { color: var(--gold); font-weight: 800; letter-spacing: 2px; text-align: center; font-size: 0.9rem; transition: all 1s; }
     
+    /* MICROEFECTOS EN BOTONES */
+    .micro-btn {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+    }
+    .micro-btn:hover {
+      transform: scale(1.08);
+      filter: brightness(1.2);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+
     .top-btn {
       background: rgba(255,255,255,0.05); border: 1px solid var(--border);
       color: #fff; padding: 8px 18px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;
-      cursor: pointer; transition: 0.3s; text-decoration: none; display: flex; align-items: center; gap: 8px; width: fit-content;
+      text-decoration: none; display: flex; align-items: center; gap: 8px; width: fit-content;
     }
 
-    /* CENTRADO PERFECTO DEL BOTON PEDIDOS YA */
     .btn-py { 
       background: var(--pedidos-ya); border: none; 
-      justify-content: center; /* Centrado horizontal */
-      text-align: center; 
-      width: 140px; /* Ancho fijo para asegurar centro visual */
+      justify-content: center; text-align: center; width: 140px; 
     }
-    .btn-py:hover { background: #ff4a7d; transform: translateY(-2px); }
 
-    /* --- HEADER (ANIMADO) --- */
+    /* --- HEADER (Marca & Status) --- */
     header {
-      position: sticky; top: 60px; z-index: 100;
-      background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
+      position: fixed; top: 60px; width: 100%; z-index: 1900;
+      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
       padding: 1rem 2rem; border-bottom: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
-      transition: all 1s ease-in-out; /* Transición suave para el centrado */
+      transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     }
     
-    /* Clase que se agrega con JS para centrar */
+    /* Estado 1: Centrado */
     header.centered {
-      justify-content: center;
-      flex-direction: column;
-      gap: 5px;
+      top: 150px; /* Baja al centro */
+      background: transparent; border: none;
+      justify-content: center; flex-direction: column; gap: 10px;
+      transform: scale(1.2);
     }
 
-    .brand { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; transition: all 0.5s; }
+    /* Estado 2: Fusionado Arriba (Final) */
+    header.merged-top {
+      top: 0; height: 60px; padding: 0; 
+      background: rgba(10, 10, 11, 0.95); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      justify-content: center; /* Logo al centro exacto */
+      transform: scale(0.8); /* Logo más chico */
+      pointer-events: none; /* Dejar clickear a los botones de top-bar */
+    }
+
+    /* Ajuste visual cuando se fusiona */
+    body.final-state .top-bar { z-index: 2100; border-bottom: none; } /* Botones por encima del header */
+    body.final-state .live-clock { transform: translateY(20px); opacity: 0; } /* Reloj baja o desaparece si molesta, o se ajusta */
+    
+    /* Alternativa: Mantener reloj y logo juntos */
+    body.final-state header.merged-top {
+       background: transparent; border: none; z-index: 1950;
+       top: 15px; /* Ajuste fino vertical */
+    }
+    
+    .brand { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     .brand span { color: var(--gold); }
     
-    .status-badge { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 6px 15px; border-radius: 20px; border: 1px solid var(--border); }
+    .status-badge { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 6px 15px; border-radius: 20px; border: 1px solid var(--border); transition: opacity 0.5s; }
+    header.centered .status-badge { opacity: 0; } /* Ocultar badge al centrar */
+    header.merged-top .status-badge { display: none; }
+
     .led { width: 8px; height: 8px; border-radius: 50%; }
     .led.green { background: var(--success); box-shadow: 0 0 10px var(--success); }
     .led.red { background: var(--error); box-shadow: 0 0 10px var(--error); }
 
-    /* Texto Happy Hour dinámico (Oculto por defecto) */
     #hh-dynamic-text {
         font-size: 0.8rem; font-weight: 800; color: var(--gold); 
         letter-spacing: 2px; text-transform: uppercase;
-        opacity: 0; transition: opacity 1s; display: none;
+        opacity: 0; transition: opacity 1s; display: none; text-align: center;
     }
     header.centered #hh-dynamic-text { display: block; opacity: 1; }
-    header.centered .status-badge { display: none; } /* Ocultamos el badge simple al centrar */
+    /* Al fusionar arriba, ocultamos el texto grande de HH para limpiar */
+    header.merged-top #hh-dynamic-text { display: none; } 
 
-    /* --- CATALOGO (ANIMADO) --- */
-    .catalog-section { padding: 5rem 1.5rem; max-width: 1400px; margin: 0 auto; overflow: hidden; }
+    /* --- CATALOGO TITULO (ANIMADO) --- */
+    .catalog-section { padding: 5rem 1.5rem; max-width: 1400px; margin: 0 auto; overflow: hidden; margin-top: 100px; }
     
     .catalog-title { 
         text-align: center; margin-bottom: 4rem; 
-        transition: all 1s ease; 
-        position: relative; 
-        left: 0;
+        transition: transform 1.5s ease-in-out, opacity 1.5s; 
+        position: relative; left: 0;
     }
     
-    /* Animación de salida hacia la izquierda */
     .catalog-title.slide-out {
         transform: translateX(-150vw);
         opacity: 0;
@@ -113,6 +145,7 @@
 
     .catalog-title h2 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #fff; margin-bottom: 0.5rem; }
     
+    /* --- GRID CERVEZAS --- */
     .grid-beers { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
 
     .beer-card {
@@ -132,13 +165,13 @@
     .tech-label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 5px; }
     .tech-value { font-size: 1.2rem; color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-    /* --- FORMULARIO & OTROS --- */
+    /* --- FORMULARIO --- */
     .form-wrapper { background: rgba(0,0,0,0.8); padding: 3rem; border-radius: 20px; border: 1px solid var(--border); max-width: 800px; margin: 4rem auto; }
     .form-inputs { display: grid; gap: 15px; }
     input, select { width: 100%; padding: 1rem; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; }
     .btn-submit { padding: 1rem; background: var(--gold); border: none; border-radius: 50px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; }
 
-    /* --- BOTTOM DOCK & REDES --- */
+    /* --- BOTTOM DOCK --- */
     .bottom-dock { 
         position: fixed; bottom: 0; width: 100%; background: rgba(10,10,11,0.98); 
         padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; 
@@ -151,8 +184,18 @@
         background: rgba(255,255,255,0.1); transition: 0.3s;
     }
     .social-btn svg { width: 20px; height: 20px; fill: #fff; }
-    .social-btn.fb:hover { background: var(--fb-blue); transform: translateY(-3px); }
-    .social-btn.ig:hover { background: var(--ig-gradient); transform: translateY(-3px); }
+    .social-btn.fb:hover { background: var(--fb-blue); }
+    .social-btn.ig:hover { background: var(--ig-gradient); }
+
+    /* --- WHATSAPP FLOAT --- */
+    .wa-float {
+        position: fixed; bottom: 90px; right: 20px;
+        background: #25D366; width: 60px; height: 60px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 20px rgba(37, 211, 102, 0.6); z-index: 2000;
+        border: 2px solid white; transition: all 0.3s ease;
+    }
+    .wa-float:hover { transform: scale(1.1) rotate(10deg); }
 
     /* --- AGE GATE --- */
     #age-gate { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -173,22 +216,22 @@
     <img src="ANTARES FOTOGRAMA2.png" style="width:180px; margin-bottom: 2rem;">
     <h2 style="font-family:'Playfair Display'; color: #fff;">¿ERES MAYOR DE 18 AÑOS?</h2>
     <div class="age-buttons">
-      <button class="btn-age" onclick="entrar()">SÍ, INGRESAR</button>
-      <button class="btn-age btn-no" onclick="denegar()">NO</button>
+      <button class="btn-age micro-btn" onclick="entrar()">SÍ, INGRESAR</button>
+      <button class="btn-age btn-no micro-btn" onclick="denegar()">NO</button>
     </div>
   </div>
 
   <div class="top-bar">
-    <button id="musicToggle" class="top-btn" onclick="toggleMusic()">SOUND OFF</button>
+    <button id="musicToggle" class="top-btn micro-btn" onclick="toggleMusic()">SOUND OFF</button>
     <div class="live-clock" id="liveClock">00:00:00</div>
-    <a href="https://www.pedidosya.com.ar" target="_blank" class="top-btn btn-py">
+    <a href="https://www.pedidosya.com.ar" target="_blank" class="top-btn btn-py micro-btn">
       PEDIDOS YA
     </a>
   </div>
 
   <header id="main-header">
     <div class="brand">ANTARES <span>CAMPANA</span></div>
-    <div id="hh-dynamic-text"></div>
+    <div id="hh-dynamic-text">VISITA NUESTRO LOCAL</div>
     
     <div class="status-badge">
       <div class="led" id="statusLed"></div>
@@ -217,22 +260,25 @@
         <option value="Patio Trasero">🌳 Patio Trasero</option>
         <option value="Salón Interior">🏠 Salón Interior</option>
       </select>
-      <button type="submit" class="btn-submit">CONFIRMAR POR WHATSAPP 📲</button>
+      <button type="submit" class="btn-submit micro-btn">CONFIRMAR POR WHATSAPP 📲</button>
     </form>
   </div>
 
   <div class="bottom-dock">
     <a href="https://maps.app.goo.gl/QjkTTDLuDCTkFf6J7" target="_blank" style="color:#fff; text-decoration:none; font-weight:bold;">📍 Ver Ubicación</a>
-    
     <div class="social-dock">
-        <a href="https://www.instagram.com/antares_campana/?hl=es" target="_blank" class="social-btn ig">
-            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        <a href="https://www.instagram.com/antares_campana/?hl=es" target="_blank" class="social-btn ig micro-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
-        <a href="https://www.facebook.com/CampanaAntares/?locale=es_LA" target="_blank" class="social-btn fb">
+        <a href="https://www.facebook.com/CampanaAntares/?locale=es_LA" target="_blank" class="social-btn fb micro-btn">
             <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </a>
     </div>
   </div>
+
+  <a href="https://api.whatsapp.com/send?phone=+543489483690" class="wa-float micro-btn" target="_blank">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  </a>
 
   <script>
     const beers = [
@@ -246,7 +292,6 @@
       { name: "ATLÁNTICA", cat: "Especial", desc: "Dorada Pampeana elaborada con agua de mar.", ibu: 18, abv: 5.0, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/atlantica-lata.png" }
     ];
 
-    // --- CARGA DE TARJETAS Y ANIMACIÓN DE NÚMEROS (Count Up) ---
     function loadBeers() {
       const grid = document.getElementById('beer-grid');
       let html = '';
@@ -272,7 +317,7 @@
         `;
       });
       grid.innerHTML = html;
-      runCounterAnimation(); // Inicia la cuenta regresiva (progresiva)
+      runCounterAnimation();
     }
 
     function runCounterAnimation() {
@@ -280,9 +325,8 @@
       counters.forEach(counter => {
         const target = +counter.getAttribute('data-target');
         const suffix = counter.getAttribute('data-suffix');
-        const duration = 2500; // 2.5 segundos
+        const duration = 2000; 
         const increment = target / (duration / 20);
-
         let current = 0;
         const updateCounter = () => {
           current += increment;
@@ -290,25 +334,19 @@
             if (Number.isInteger(target)) { counter.innerText = Math.ceil(current) + suffix; } 
             else { counter.innerText = current.toFixed(1) + suffix; }
             setTimeout(updateCounter, 20);
-          } else {
-            counter.innerText = target + suffix;
-          }
+          } else { counter.innerText = target + suffix; }
         };
         updateCounter();
       });
     }
 
-    // --- LÓGICA DE HAPPY HOUR Y HORARIOS ---
+    // --- LOGICA DE HAPPY HOUR ---
     function checkHappyHour(day, hour) {
-        // Lunes(1) a Sabado(6): 16 a 20hs
-        if (day >= 1 && day <= 6 && hour >= 16 && hour < 20) {
-            return "HAPPY HOUR: 16:00 - 20:00 HS";
-        }
-        // Domingo(0): 01 a 02hs
-        if (day === 0 && hour === 1) {
-            return "HAPPY HOUR: 01:00 - 02:00 HS";
-        }
-        return null;
+        // Lun(1)-Sab(6): 16-20
+        if (day >= 1 && day <= 6 && hour >= 16 && hour < 20) return "HAPPY HOUR ACTIVO (16-20 HS)";
+        // Dom(0): 01-02
+        if (day === 0 && hour === 1) return "HAPPY HOUR NOCTURNO (01-02 HS)";
+        return "VISITA NUESTRO LOCAL";
     }
 
     function updateStatus() {
@@ -317,57 +355,43 @@
       const d = now.getDay();
       document.getElementById('liveClock').innerText = now.toLocaleTimeString();
       
-      // Estado Abierto/Cerrado
       const isOpen = (h >= 16 || h < 4);
       const led = document.getElementById('statusLed');
       const txt = document.getElementById('statusText');
-      if(isOpen) {
-        led.className = "led green"; txt.innerText = "ABIERTO"; txt.style.color = "var(--success)";
-      } else {
-        led.className = "led red"; txt.innerText = "CERRADO"; txt.style.color = "var(--error)";
-      }
+      if(isOpen) { led.className = "led green"; txt.innerText = "ABIERTO"; txt.style.color = "var(--success)"; }
+      else { led.className = "led red"; txt.innerText = "CERRADO"; txt.style.color = "var(--error)"; }
 
-      // Actualizar Texto de Happy Hour si el header está centrado
-      const hhText = checkHappyHour(d, h);
-      const hhContainer = document.getElementById('hh-dynamic-text');
-      if (hhText) {
-          hhContainer.innerText = hhText;
-          hhContainer.style.color = "var(--gold)";
-      } else {
-          hhContainer.innerText = "VISITA NUESTRA FÁBRICA";
-          hhContainer.style.color = "#ccc";
-      }
+      // Actualizar texto dinámico
+      document.getElementById('hh-dynamic-text').innerText = checkHappyHour(d, h);
     }
 
-    // --- ANIMACIÓN SECUENCIAL (6 Segundos) ---
+    // --- ANIMACIÓN SECUENCIAL (6s + 2s) ---
     function triggerAnimations() {
+        // 1. A los 6 seg: Título se va a la izquierda y Header se centra
         setTimeout(() => {
-            // 1. Título "Nuestras Cervezas" se va a la izquierda
             document.getElementById('catalog-title-container').classList.add('slide-out');
-            
-            // 2. Header "ANTARES CAMPANA" se centra
             document.getElementById('main-header').classList.add('centered');
             
-        }, 6000); // 6000 ms = 6 segundos
+            // 2. A los 8 seg (6 + 2): Header se fusiona arriba con el Reloj/Botones
+            setTimeout(() => {
+                document.getElementById('main-header').classList.remove('centered');
+                document.getElementById('main-header').classList.add('merged-top');
+                document.body.classList.add('final-state');
+            }, 2000); 
+            
+        }, 6000);
     }
 
-    // --- AGE GATE ---
     function entrar() {
       document.getElementById('age-gate').style.opacity = '0';
       setTimeout(() => { document.getElementById('age-gate').style.display = 'none'; }, 500);
       const music = document.getElementById('bg-music');
       music.volume = 0.2; music.play().catch(()=>{});
-      
-      // Iniciar animaciones al entrar
       triggerAnimations();
     }
 
     function denegar() {
-      document.getElementById('age-gate').innerHTML = `
-        <h2 style="color:var(--error); font-family:'Playfair Display'; text-align:center;">ACCESO DENEGADO</h2>
-        <p style="color:#ccc; margin-top:10px;">Debes ser mayor de 18 años.</p>
-        <a href="https://www.google.com" style="color:var(--gold); margin-top:20px; text-decoration:none; border-bottom:1px solid var(--gold);">Salir</a>
-      `;
+      document.getElementById('age-gate').innerHTML = `<h2 style="color:var(--error);">ACCESO DENEGADO</h2><a href="https://www.google.com" style="color:#fff;">Salir</a>`;
     }
 
     function toggleMusic() {
@@ -377,14 +401,12 @@
       else { a.pause(); btn.innerText = "SOUND OFF"; }
     }
 
-    // --- RESERVA FORM ---
     document.getElementById('reserva-form').onsubmit = (e) => {
       e.preventDefault();
       const n = document.getElementById('nombre').value;
       const f = document.getElementById('fecha').value;
       const u = document.getElementById('ubicacion').value;
-      const msg = `Hola Antares! Reserva:%0A👤 ${n}%0A📅 ${f}%0A📍 Sector: ${u}`;
-      window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=${msg}`, '_blank');
+      window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=Reserva: ${n}, ${f}, ${u}`, '_blank');
     }
 
     window.onload = () => {
@@ -396,10 +418,3 @@
 </body>
 </html>
 "commit"
-
-
-
-
-
-
-
