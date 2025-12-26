@@ -54,7 +54,6 @@
         text-align: center; font-size: 0.9rem; transition: all 1s; 
     }
     
-    /* MICROEFECTOS */
     .micro-btn {
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       cursor: pointer;
@@ -86,28 +85,20 @@
     }
     
     header.centered {
-      top: 150px; 
-      background: transparent; border: none;
-      justify-content: center; flex-direction: column; gap: 10px;
-      transform: scale(1.2);
+      top: 150px; background: transparent; border: none;
+      justify-content: center; flex-direction: column; gap: 10px; transform: scale(1.2);
     }
 
     header.merged-top {
       top: 0; height: 60px; padding: 0; 
       background: rgba(10, 10, 11, 0.95); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      justify-content: center; 
-      transform: scale(0.8); 
-      pointer-events: none; 
+      justify-content: center; transform: scale(0.8); pointer-events: none; 
     }
 
     body.final-state .top-bar { z-index: 2100; border-bottom: none; }
     body.final-state .live-clock { opacity: 0; transform: translateY(-20px); } 
-    
-    body.final-state header.merged-top {
-       background: transparent; border: none; z-index: 1950;
-       top: 15px; 
-    }
+    body.final-state header.merged-top { background: transparent; border: none; z-index: 1950; top: 15px; }
     
     .brand { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     .brand span { color: var(--gold); }
@@ -126,52 +117,28 @@
         opacity: 0; transition: opacity 1s; display: none; text-align: center;
     }
     header.centered #hh-dynamic-text { display: block; opacity: 1; }
-    header.merged-top #hh-dynamic-text { display: none; } 
 
     /* --- CATALOGO --- */
     .catalog-section { padding: 5rem 1.5rem; max-width: 1400px; margin: 0 auto; overflow: hidden; margin-top: 100px; }
-    
-    .catalog-title { 
-        text-align: center; margin-bottom: 4rem; 
-        transition: transform 1.5s ease-in-out, opacity 1.5s; 
-        position: relative; left: 0;
-    }
-    
-    .catalog-title.slide-out {
-        transform: translateX(-150vw);
-        opacity: 0;
-    }
-
+    .catalog-title { text-align: center; margin-bottom: 4rem; transition: transform 1.5s ease-in-out, opacity 1.5s; position: relative; left: 0; }
+    .catalog-title.slide-out { transform: translateX(-150vw); opacity: 0; }
     .catalog-title h2 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #fff; margin-bottom: 0.5rem; }
     
     /* --- GRID CERVEZAS --- */
     .grid-beers { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-
-    /* Estilos para animar la entrada de las tarjetas */
     .beer-card {
       background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
       border-radius: 20px; padding: 2rem; backdrop-filter: blur(15px); 
       display: flex; flex-direction: column; align-items: center;
-      
-      /* Estado inicial: oculto y desplazado hacia abajo */
-      opacity: 0; 
-      transform: translateY(50px);
+      opacity: 0; transform: translateY(50px);
       transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
-    
-    /* Estado visible (se agrega con JS) */
-    .beer-card.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
+    .beer-card.visible { opacity: 1; transform: translateY(0); }
     .beer-card:hover { transform: translateY(-10px) !important; border-color: var(--gold); background: rgba(255, 255, 255, 0.06); transition: transform 0.3s; }
-
     .beer-img { width: 100%; height: 250px; object-fit: contain; margin-bottom: 1.5rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5)); }
     .beer-category { font-size: 0.65rem; text-transform: uppercase; color: var(--gold); font-weight: 800; letter-spacing: 2px; margin-bottom: 0.5rem; }
     .beer-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; margin-bottom: 1rem; text-align: center; }
     .beer-desc { font-size: 0.85rem; color: #ccc; text-align: center; line-height: 1.6; margin-bottom: 2rem; min-height: 60px; }
-
     .tech-sheet { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; border-top: 1px solid rgba(212, 175, 55, 0.2); padding-top: 1.5rem; }
     .tech-item { text-align: center; }
     .tech-label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 5px; }
@@ -190,7 +157,7 @@
         z-index: 1900; border-top: 1px solid var(--border); 
     }
     
-    .social-dock { display: flex; gap: 15px; align-items: center; }
+    .dock-group { display: flex; gap: 15px; align-items: center; }
     .social-btn { 
         width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
         background: rgba(255,255,255,0.1); transition: 0.3s;
@@ -198,6 +165,9 @@
     .social-btn svg { width: 20px; height: 20px; fill: #fff; }
     .social-btn.fb:hover { background: var(--fb-blue); }
     .social-btn.ig:hover { background: var(--ig-gradient); }
+    /* Estilo para el nuevo botón de ubicación */
+    .social-btn.map:hover { background: var(--gold); }
+    .social-btn.map:hover svg { fill: #000; }
 
     /* --- WHATSAPP FLOAT --- */
     .wa-float {
@@ -234,19 +204,14 @@
   </div>
 
   <div class="top-bar">
-    <a href="https://www.pedidosya.com.ar" target="_blank" class="top-btn btn-py micro-btn">
-      PEDIDOS YA
-    </a>
+    <a href="https://www.pedidosya.com.ar" target="_blank" class="top-btn btn-py micro-btn">PEDIDOS YA</a>
     <div class="live-clock" id="liveClock">00:00:00</div>
-    <button id="musicToggle" class="top-btn micro-btn" style="justify-self: end;" onclick="toggleMusic()">
-      SOUND OFF
-    </button>
+    <button id="musicToggle" class="top-btn micro-btn" style="justify-self: end;" onclick="toggleMusic()">SOUND OFF</button>
   </div>
 
   <header id="main-header">
     <div class="brand">ANTARES <span>CAMPANA</span></div>
     <div id="hh-dynamic-text">VISITA NUESTRO LOCAL</div>
-    
     <div class="status-badge">
       <div class="led" id="statusLed"></div>
       <span id="statusText">...</span>
@@ -258,9 +223,7 @@
       <h2>Nuestras Cervezas</h2>
       <p>FICHA TÉCNICA OFICIAL</p>
     </div>
-    
-    <div class="grid-beers" id="beer-grid">
-      </div>
+    <div class="grid-beers" id="beer-grid"></div>
   </section>
 
   <div class="form-wrapper">
@@ -279,10 +242,16 @@
   </div>
 
   <div class="bottom-dock">
-    <a href="https://maps.app.goo.gl/QjkTTDLuDCTkFf6J7" target="_blank" style="color:#fff; text-decoration:none; font-weight:bold;">📍 Ver Ubicación</a>
-    <div class="social-dock">
+    <div class="dock-group">
+        <a href="https://maps.app.goo.gl/3A5ToxLzN2p8Y65m9" target="_blank" class="social-btn map micro-btn" title="Ver Ubicación">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </a>
+        <span style="font-size: 0.8rem; font-weight: 800; color: #fff; letter-spacing: 1px;">UBICACIÓN</span>
+    </div>
+
+    <div class="dock-group">
         <a href="https://www.instagram.com/antares_campana/?hl=es" target="_blank" class="social-btn ig micro-btn">
-            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
         <a href="https://www.facebook.com/CampanaAntares/?locale=es_LA" target="_blank" class="social-btn fb micro-btn">
             <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -309,7 +278,6 @@
     function loadBeers() {
       const grid = document.getElementById('beer-grid');
       let html = '';
-      
       beers.forEach(b => {
         html += `
           <article class="beer-card">
@@ -318,20 +286,13 @@
             <h3 class="beer-name">${b.name}</h3>
             <p class="beer-desc">${b.desc}</p>
             <div class="tech-sheet">
-              <div class="tech-item">
-                <span class="tech-label">IBU</span>
-                <span class="tech-value" data-target="${b.ibu}" data-suffix="">0</span>
-              </div>
-              <div class="tech-item">
-                <span class="tech-label">ABV</span>
-                <span class="tech-value" data-target="${b.abv}" data-suffix="%">0</span>
-              </div>
+              <div class="tech-item"><span class="tech-label">IBU</span><span class="tech-value" data-target="${b.ibu}" data-suffix="">0</span></div>
+              <div class="tech-item"><span class="tech-label">ABV</span><span class="tech-value" data-target="${b.abv}" data-suffix="%">0</span></div>
             </div>
           </article>
         `;
       });
       grid.innerHTML = html;
-      // NOTA: Ya no llamamos a runCounterAnimation aquí, sino cuando se muestran las cartas
     }
 
     function runCounterAnimation(cardElement) {
@@ -339,14 +300,12 @@
       counters.forEach(counter => {
         const target = +counter.getAttribute('data-target');
         const suffix = counter.getAttribute('data-suffix');
-        const duration = 2000; 
-        const increment = target / (duration / 20);
+        const duration = 2000; const increment = target / (duration / 20);
         let current = 0;
         const updateCounter = () => {
           current += increment;
           if (current < target) {
-            if (Number.isInteger(target)) { counter.innerText = Math.ceil(current) + suffix; } 
-            else { counter.innerText = current.toFixed(1) + suffix; }
+            counter.innerText = (Number.isInteger(target) ? Math.ceil(current) : current.toFixed(1)) + suffix;
             setTimeout(updateCounter, 20);
           } else { counter.innerText = target + suffix; }
         };
@@ -354,7 +313,6 @@
       });
     }
 
-    // --- LOGICA DE HAPPY HOUR ---
     function checkHappyHour(day, hour) {
         if (day >= 1 && day <= 6 && hour >= 16 && hour < 20) return "HAPPY HOUR ACTIVO (16-20 HS)";
         if (day === 0 && hour === 1) return "HAPPY HOUR NOCTURNO (01-02 HS)";
@@ -363,50 +321,36 @@
 
     function updateStatus() {
       const now = new Date();
-      const h = now.getHours();
-      const d = now.getDay();
       document.getElementById('liveClock').innerText = now.toLocaleTimeString();
-      
-      const isOpen = (h >= 16 || h < 4);
+      const isOpen = (now.getHours() >= 16 || now.getHours() < 4);
       const led = document.getElementById('statusLed');
       const txt = document.getElementById('statusText');
-      if(isOpen) { led.className = "led green"; txt.innerText = "ABIERTO"; txt.style.color = "var(--success)"; }
-      else { led.className = "led red"; txt.innerText = "CERRADO"; txt.style.color = "var(--error)"; }
-
-      document.getElementById('hh-dynamic-text').innerText = checkHappyHour(d, h);
+      led.className = isOpen ? "led green" : "led red";
+      txt.innerText = isOpen ? "ABIERTO" : "CERRADO";
+      txt.style.color = isOpen ? "var(--success)" : "var(--error)";
+      document.getElementById('hh-dynamic-text').innerText = checkHappyHour(now.getDay(), now.getHours());
     }
 
-    // --- ANIMACIÓN SECUENCIAL ---
     function triggerAnimations() {
-        // 1. A los 6 seg: Título se va y Header se centra
         setTimeout(() => {
             document.getElementById('catalog-title-container').classList.add('slide-out');
             document.getElementById('main-header').classList.add('centered');
-            
-            // 2. A los 8 seg (6 + 2): Header se fusiona arriba
             setTimeout(() => {
                 document.getElementById('main-header').classList.remove('centered');
                 document.getElementById('main-header').classList.add('merged-top');
                 document.body.classList.add('final-state');
             }, 2000); 
-
-            // 3. NUEVO: 5 segundos después de que se mueven los títulos (6s + 5s = 11s absolutos)
-            setTimeout(() => {
-                revealCards();
-            }, 5000);
-            
+            setTimeout(() => { revealCards(); }, 5000);
         }, 6000);
     }
 
-    // Función para mostrar cartas una por una
     function revealCards() {
         const cards = document.querySelectorAll('.beer-card');
         cards.forEach((card, index) => {
             setTimeout(() => {
                 card.classList.add('visible');
-                // Disparamos los números solo cuando la carta aparece
                 runCounterAnimation(card);
-            }, index * 200); // 200ms de retraso entre cada carta (efecto cascada)
+            }, index * 200);
         });
     }
 
@@ -437,16 +381,11 @@
       window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=Reserva: ${n}, ${f}, ${u}`, '_blank');
     }
 
-    window.onload = () => {
-      loadBeers();
-      updateStatus();
-      setInterval(updateStatus, 1000);
-    };
+    window.onload = () => { loadBeers(); updateStatus(); setInterval(updateStatus, 1000); };
   </script>
- 
 </body>
 </html>
-"commit"
+
 
 
 
