@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Antares Campana | Catálogo Profesional</title>
+  <title>Antares Campana | Catálogo Interactivo</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -28,13 +28,13 @@
       padding-bottom: 90px;
     }
 
-    /* --- BACKGROUND & VIDEO --- */
+    /* --- BACKGROUND --- */
     #bg-video {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       object-fit: cover; z-index: -4; filter: brightness(0.3);
     }
 
-    /* --- TOP BAR & CLOCK --- */
+    /* --- TOP BAR --- */
     .top-bar {
       position: fixed; top: 0; width: 100%; height: 60px;
       display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
@@ -49,7 +49,7 @@
       cursor: pointer; transition: 0.3s; text-decoration: none;
     }
 
-    /* --- HEADER & STATUS --- */
+    /* --- HEADER --- */
     header {
       position: sticky; top: 60px; z-index: 100;
       background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
@@ -60,106 +60,72 @@
     .brand span { color: var(--gold); }
     
     .status-badge { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 6px 15px; border-radius: 20px; border: 1px solid var(--border); }
-    .led { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
+    .led { width: 8px; height: 8px; border-radius: 50%; }
     .led.green { background: var(--success); box-shadow: 0 0 10px var(--success); }
     .led.red { background: var(--error); box-shadow: 0 0 10px var(--error); }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* --- CATALOGO DE TARJETAS TECNICAS --- */
+    /* --- CATALOGO --- */
     .catalog-section { padding: 5rem 1.5rem; max-width: 1400px; margin: 0 auto; }
     .catalog-title { text-align: center; margin-bottom: 4rem; }
     .catalog-title h2 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #fff; margin-bottom: 0.5rem; }
-    .catalog-title p { color: var(--gold); letter-spacing: 3px; font-weight: 600; font-size: 0.8rem; }
-
-    .grid-beers {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 25px;
-    }
+    
+    .grid-beers { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
 
     .beer-card {
       background: var(--card-bg);
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 2rem;
-      backdrop-filter: blur(15px);
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      border-radius: 20px; padding: 2rem;
+      backdrop-filter: blur(15px); transition: all 0.4s ease;
+      display: flex; flex-direction: column; align-items: center;
     }
-    .beer-card:hover {
-      transform: translateY(-10px);
-      border-color: var(--gold);
-      background: rgba(255, 255, 255, 0.06);
-    }
+    .beer-card:hover { transform: translateY(-10px); border-color: var(--gold); background: rgba(255, 255, 255, 0.06); }
 
-    .beer-img {
-      width: 100%;
-      height: 250px;
-      object-fit: contain;
-      margin-bottom: 1.5rem;
-      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));
-    }
+    .beer-img { width: 100%; height: 250px; object-fit: contain; margin-bottom: 1.5rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5)); }
+    .beer-category { font-size: 0.65rem; text-transform: uppercase; color: var(--gold); font-weight: 800; letter-spacing: 2px; margin-bottom: 0.5rem; }
+    .beer-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; margin-bottom: 1rem; text-align: center; }
+    .beer-desc { font-size: 0.85rem; color: #ccc; text-align: center; line-height: 1.6; margin-bottom: 2rem; min-height: 60px; }
 
-    .beer-category {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 800;
-      letter-spacing: 2px;
-      margin-bottom: 0.5rem;
-    }
-
-    .beer-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      color: #fff;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .beer-desc {
-      font-size: 0.85rem;
-      color: #ccc;
-      text-align: center;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-      min-height: 60px;
-    }
-
-    /* Ficha Técnica Profesional */
-    .tech-sheet {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
-      padding-top: 1.5rem;
-    }
+    .tech-sheet { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; border-top: 1px solid rgba(212, 175, 55, 0.2); padding-top: 1.5rem; }
     .tech-item { text-align: center; }
     .tech-label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 5px; }
-    .tech-value { font-size: 1.2rem; color: #fff; font-weight: 700; }
+    /* Clase importante para la animación */
+    .tech-value { font-size: 1.2rem; color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-    /* --- FORMULARIO & OTROS (SE MANTIENEN) --- */
+    /* --- FORMULARIO & AGE GATE --- */
     .form-wrapper { background: rgba(0,0,0,0.8); padding: 3rem; border-radius: 20px; border: 1px solid var(--border); max-width: 800px; margin: 4rem auto; }
-    #age-gate { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    .btn-age { padding: 15px 40px; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-weight: 800; cursor: pointer; border-radius: 50px; }
+    
+    #age-gate { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
+    
+    .age-buttons { display: flex; gap: 20px; margin-top: 2rem; }
+    
+    .btn-age { padding: 15px 40px; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-weight: 800; cursor: pointer; border-radius: 50px; transition: 0.3s; }
+    .btn-age:hover { background: var(--gold); color: #000; }
+    
+    .btn-no { border-color: #555; color: #777; }
+    .btn-no:hover { background: #333; color: #fff; border-color: #fff; }
+
+    /* Estilos del Formulario */
+    .form-inputs { display: grid; gap: 15px; }
+    input, select { width: 100%; padding: 1rem; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; font-family: inherit; }
+    input:focus, select:focus { border-color: var(--gold); outline: none; background: #000; }
+    .btn-submit { padding: 1rem; background: var(--gold); border: none; border-radius: 50px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; }
+    .btn-submit:hover { background: #fff; }
+
   </style>
 </head>
 <body>
 
   <video id="bg-video" autoplay muted loop playsinline><source src="VIDEO ANTARES.mp4" type="video/mp4"></video>
+  <audio id="bg-music" loop><source src="Neon Currents.mp3" type="audio/mpeg"></audio>
 
   <div id="age-gate">
     <img src="ANTARES FOTOGRAMA2.png" style="width:180px; margin-bottom: 2rem;">
-    <h2 style="font-family:'Playfair Display'; color: #fff; margin-bottom: 2rem;">¿ERES MAYOR DE EDAD?</h2>
-    <button class="btn-age" onclick="entrar()">SÍ, CONFIRMO</button>
+    <h2 style="font-family:'Playfair Display'; color: #fff;">¿ERES MAYOR DE 18 AÑOS?</h2>
+    <div class="age-buttons">
+      <button class="btn-age" onclick="entrar()">SÍ, INGRESAR</button>
+      <button class="btn-age btn-no" onclick="denegar()">NO</button>
+    </div>
   </div>
-
-  <audio id="bg-music" loop><source src="Neon Currents.mp3" type="audio/mpeg"></audio>
 
   <div class="top-bar">
     <button id="musicToggle" class="top-btn" onclick="toggleMusic()">SOUND OFF</button>
@@ -171,7 +137,7 @@
     <div class="brand">ANTARES <span>CAMPANA</span></div>
     <div class="status-badge">
       <div class="led" id="statusLed"></div>
-      <span id="statusText">CARGANDO...</span>
+      <span id="statusText">...</span>
     </div>
   </header>
 
@@ -186,28 +152,39 @@
 
   <div class="form-wrapper">
     <h2 style="text-align:center; font-family:'Playfair Display'; color:var(--gold); margin-bottom:2rem;">Reserva de Mesa</h2>
-    <form id="reserva-form" style="display:grid; gap:15px;">
-      <input type="text" id="nombre" placeholder="Nombre" required style="padding:1rem; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid #333; color:#fff;">
-      <input type="date" id="fecha" required style="padding:1rem; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid #333; color:#fff;">
-      <button type="submit" style="padding:1rem; background:var(--gold); border:none; border-radius:50px; font-weight:800; cursor:pointer;">ENVIAR WHATSAPP</button>
+    <form id="reserva-form" class="form-inputs">
+      <input type="text" id="nombre" placeholder="Nombre y Apellido" required>
+      <input type="date" id="fecha" required>
+      <select id="ubicacion" required>
+        <option value="" disabled selected>Selecciona tu ubicación preferida...</option>
+        <option value="Patio Frente">🍻 Patio Frente (Al aire libre)</option>
+        <option value="Patio Trasero">🌳 Patio Trasero (Jardín)</option>
+        <option value="Salón Interior">🏠 Salón Interior (Climatizado)</option>
+        <option value="Barra">🍺 Barra</option>
+      </select>
+      <button type="submit" class="btn-submit">CONFIRMAR POR WHATSAPP 📲</button>
     </form>
   </div>
 
   <script>
     const beers = [
-      { name: "KÖLSCH", cat: "Clásica", desc: "Nuestra interpretación del estilo de Colonia. Refrescante, dorada y cristalina.", ibu: "22", abv: "5.0%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/kolsch-473ml-lata.png" },
-      { name: "SCOTCH", cat: "Clásica", desc: "Inspirada en las Ale de Escocia. Notas a caramelo, dulce y de cuerpo medio.", ibu: "18", abv: "6.0%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/scotch-473ml.png" },
-      { name: "IPA", cat: "Lupulada", desc: "Explosión de lúpulo americano. Amargor persistente con notas cítricas y resinosas.", ibu: "58", abv: "6.6%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/ipa-473ml-lata.png" },
-      { name: "PORTER", cat: "Clásica Negra", desc: "Malta tostada que evoca sabores a chocolate amargo y café recién molido.", ibu: "27", abv: "5.5%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/porter-473ml.png" },
-      { name: "HONEY BEER", cat: "Especial", desc: "Suave, con miel pura seleccionada que aporta un aroma floral y dulzor equilibrado.", ibu: "22", abv: "7.5%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/honey-beer-473ml.png" },
-      { name: "CARAVANA", cat: "Session IPA", desc: "Mucho carácter de lúpulo pero con bajo alcohol. Ideal para tomarse varias.", ibu: "30", abv: "4.2%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/caravana-473ml.png" },
-      { name: "CREAM STOUT", cat: "Especial Negra", desc: "Cremosa, con nitrógeno y notas a chocolate. Un postre en copa.", ibu: "22", abv: "7.0%", img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/cream-stout.png" }
+      { name: "KÖLSCH", cat: "Clásica", desc: "Interpretación del estilo de Colonia. Refrescante, dorada y cristalina.", ibu: 22, abv: 5.0, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/kolsch-473ml-lata.png" },
+      { name: "SCOTCH", cat: "Clásica", desc: "Inspirada en las Ale de Escocia. Notas a caramelo y cuerpo medio.", ibu: 18, abv: 6.0, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/scotch-473ml.png" },
+      { name: "IPA", cat: "Lupulada", desc: "Explosión de lúpulo americano. Amargor persistente y cítrico.", ibu: 58, abv: 6.6, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/ipa-473ml-lata.png" },
+      { name: "PORTER", cat: "Clásica Negra", desc: "Malta tostada, sabores a chocolate amargo y café.", ibu: 27, abv: 5.5, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/porter-473ml.png" },
+      { name: "HONEY", cat: "Especial", desc: "Con miel pura. Aroma floral y dulzor equilibrado.", ibu: 22, abv: 7.5, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/honey-beer-473ml.png" },
+      { name: "CARAVANA", cat: "Session IPA", desc: "Mucho carácter de lúpulo pero con bajo alcohol.", ibu: 30, abv: 4.2, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/caravana-473ml.png" },
+      { name: "CREAM STOUT", cat: "Especial Negra", desc: "Cremosa, nitrogenada y con notas a chocolate.", ibu: 22, abv: 7.0, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/cream-stout.png" },
+      { name: "ATLÁNTICA", cat: "Especial", desc: "Dorada Pampeana elaborada con agua de mar.", ibu: 18, abv: 5.0, img: "https://tienda.cervezaantares.com/wp-content/uploads/2024/08/atlantica-lata.png" }
     ];
 
+    // --- CARGA Y ANIMACIÓN DE NÚMEROS ---
     function loadBeers() {
       const grid = document.getElementById('beer-grid');
+      let html = '';
+      
       beers.forEach(b => {
-        grid.innerHTML += `
+        html += `
           <article class="beer-card">
             <span class="beer-category">${b.cat}</span>
             <img src="${b.img}" class="beer-img" alt="${b.name}">
@@ -215,32 +192,87 @@
             <p class="beer-desc">${b.desc}</p>
             <div class="tech-sheet">
               <div class="tech-item">
-                <span class="tech-label">IBU (Amargor)</span>
-                <span class="tech-value">${b.ibu}</span>
+                <span class="tech-label">IBU</span>
+                <span class="tech-value" data-target="${b.ibu}" data-suffix="">0</span>
               </div>
               <div class="tech-item">
-                <span class="tech-label">ABV (Alcohol)</span>
-                <span class="tech-value">${b.abv}</span>
+                <span class="tech-label">ABV</span>
+                <span class="tech-value" data-target="${b.abv}" data-suffix="%">0</span>
               </div>
             </div>
           </article>
         `;
       });
+      grid.innerHTML = html;
+      
+      // Iniciar efecto contador
+      runCounterAnimation();
     }
 
+    function runCounterAnimation() {
+      const counters = document.querySelectorAll('.tech-value');
+      
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target'); // El + convierte string a numero
+        const suffix = counter.getAttribute('data-suffix');
+        const duration = 2000; // Duración en ms (2 segundos)
+        const increment = target / (duration / 20); // Pasos de actualización
+
+        let current = 0;
+        
+        const updateCounter = () => {
+          current += increment;
+          if (current < target) {
+            // Si es entero (IBU) o decimal (ABV)
+            if (Number.isInteger(target)) {
+               counter.innerText = Math.ceil(current) + suffix;
+            } else {
+               counter.innerText = current.toFixed(1) + suffix;
+            }
+            setTimeout(updateCounter, 20);
+          } else {
+            counter.innerText = target + suffix; // Asegurar valor final exacto
+          }
+        };
+        updateCounter();
+      });
+    }
+
+    // --- LÓGICA GENERAL ---
     function updateStatus() {
       const h = new Date().getHours();
       const isOpen = (h >= 16 || h < 4);
       document.getElementById('liveClock').innerText = new Date().toLocaleTimeString();
-      document.getElementById('statusLed').className = isOpen ? "led green" : "led red";
-      document.getElementById('statusText').innerText = isOpen ? "ABIERTO AHORA" : "CERRADO";
-      document.getElementById('statusText').style.color = isOpen ? "var(--success)" : "var(--error)";
+      
+      const led = document.getElementById('statusLed');
+      const txt = document.getElementById('statusText');
+      
+      if(isOpen) {
+        led.className = "led green";
+        txt.innerText = "ABIERTO";
+        txt.style.color = "var(--success)";
+      } else {
+        led.className = "led red";
+        txt.innerText = "CERRADO";
+        txt.style.color = "var(--error)";
+      }
     }
 
+    // --- AGE GATE LOGIC ---
     function entrar() {
-      document.getElementById('age-gate').style.display = 'none';
+      document.getElementById('age-gate').style.opacity = '0';
+      setTimeout(() => { document.getElementById('age-gate').style.display = 'none'; }, 500);
       const music = document.getElementById('bg-music');
       music.volume = 0.2; music.play().catch(()=>{});
+    }
+
+    function denegar() {
+      // Reemplaza el contenido del modal
+      document.getElementById('age-gate').innerHTML = `
+        <h2 style="color:var(--error); font-family:'Playfair Display'; text-align:center;">ACCESO DENEGADO</h2>
+        <p style="color:#ccc; margin-top:10px;">Debes ser mayor de 18 años para ingresar a este sitio.</p>
+        <a href="https://www.google.com" style="color:var(--gold); margin-top:20px; text-decoration:none; border-bottom:1px solid var(--gold);">Salir de la página</a>
+      `;
     }
 
     function toggleMusic() {
@@ -248,6 +280,17 @@
       const btn = document.getElementById('musicToggle');
       if(a.paused) { a.play(); btn.innerText = "SOUND ON"; }
       else { a.pause(); btn.innerText = "SOUND OFF"; }
+    }
+
+    // --- RESERVA FORM LOGIC ---
+    document.getElementById('reserva-form').onsubmit = (e) => {
+      e.preventDefault();
+      const n = document.getElementById('nombre').value;
+      const f = document.getElementById('fecha').value;
+      const u = document.getElementById('ubicacion').value;
+      
+      const msg = `Hola Antares! Quiero reservar:%0A👤 ${n}%0A📅 ${f}%0A📍 Sector: ${u}`;
+      window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=${msg}`, '_blank');
     }
 
     window.onload = () => {
@@ -259,6 +302,7 @@
 </body>
 </html>
 "commit"
+
 
 
 
