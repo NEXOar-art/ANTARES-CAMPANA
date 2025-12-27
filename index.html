@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Antares Campana | Experiencia Interactiva</title>
   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
@@ -141,7 +143,7 @@
     .tech-label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 5px; }
     .tech-value { font-size: 1.2rem; color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-    /* --- FORMULARIO NUEVO VISUAL --- */
+    /* --- FORMULARIO --- */
     .form-wrapper { 
         background: rgba(10, 10, 11, 0.95); 
         padding: 2.5rem; 
@@ -157,7 +159,6 @@
         letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;
     }
 
-    /* Personas Counter */
     .counter-control {
         display: flex; align-items: center; justify-content: center; gap: 20px;
         background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px;
@@ -171,7 +172,6 @@
     .btn-count:hover { background: var(--gold); color: #000; }
     #people-display { font-size: 2rem; font-family: 'Playfair Display'; font-weight: 700; min-width: 40px; text-align: center; }
 
-    /* Date & Name Inputs */
     .input-group { margin-bottom: 2rem; }
     .custom-input { 
         width: 100%; padding: 15px; background: rgba(255,255,255,0.05); 
@@ -180,7 +180,6 @@
     }
     .custom-input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
 
-    /* Sectors Grid */
     .sector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 2rem; }
     .sector-card {
         padding: 15px; border: 1px solid #444; border-radius: 12px;
@@ -193,7 +192,6 @@
     .sector-card p { font-size: 0.7rem; opacity: 0.7; }
     .sector-card.selected p { opacity: 1; color: #000; font-weight: 700; }
 
-    /* Time Grid */
     .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-bottom: 2rem; }
     .time-slot {
         padding: 10px 5px; border-radius: 8px; border: 1px solid #444;
@@ -207,7 +205,6 @@
     .spots-left.full { color: var(--error); }
     .time-slot.selected .spots-left { color: #000; }
 
-    /* Submit Button */
     .btn-submit { 
         padding: 1.2rem; background: var(--gold); border: none; border-radius: 50px; 
         font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; font-size: 1rem;
@@ -335,8 +332,8 @@
           </p>
       </div>
 
-      <button type="button" id="submit-btn" class="btn-submit micro-btn" disabled onclick="sendToWhatsapp()">
-          COMPLETAR RESERVA 📲
+      <button type="button" id="submit-btn" class="btn-submit micro-btn" disabled onclick="finalizeReservation()">
+          CONFIRMAR Y DESCARGAR TICKET 📲
       </button>
     </form>
   </div>
@@ -479,7 +476,7 @@
       else { a.pause(); btn.innerText = "SOUND OFF"; }
     }
 
-    /* --- LÓGICA DE RESERVAS --- */
+    /* --- LÓGICA DE RESERVAS, PERSISTENCIA Y PDF --- */
     
     let reservationState = {
         people: 2,
@@ -490,35 +487,47 @@
 
     const timeSlots = ["16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30"];
     
-    // Función para manejar cantidad de personas
+    // Función auxiliar para obtener cupos restantes (Simulación DB Local)
+    function getRemainingSpots(date, sector, time) {
+        const key = `antares_${date}_${sector}_${time}`;
+        const stored = localStorage.getItem(key);
+        // Si no existe, iniciamos con 9 lugares
+        if (stored === null) return 9;
+        return parseInt(stored);
+    }
+
+    // Función para ocupar un lugar
+    function bookSpot(date, sector, time) {
+        const key = `antares_${date}_${sector}_${time}`;
+        let current = getRemainingSpots(date, sector, time);
+        if (current > 0) {
+            localStorage.setItem(key, current - 1);
+        }
+    }
+
     function updatePeople(change) {
         let newVal = reservationState.people + change;
         if (newVal < 1) newVal = 1;
-        if (newVal > 20) newVal = 20; // Límite razonable
+        if (newVal > 20) newVal = 20;
         reservationState.people = newVal;
         document.getElementById('people-display').innerText = newVal;
         checkFormValidity();
     }
 
-    // Al cambiar sector
     function selectSector(sectorName, element) {
-        // Estilos
         document.querySelectorAll('.sector-card').forEach(c => c.classList.remove('selected'));
         element.classList.add('selected');
-        
-        // Estado
         reservationState.sector = sectorName;
         resetAvailability();
         checkFormValidity();
     }
 
-    // Resetear horarios cuando cambia fecha o sector
     function resetAvailability() {
         const dateVal = document.getElementById('fecha-input').value;
         const gridContainer = document.getElementById('time-grid-container');
         
         reservationState.date = dateVal;
-        reservationState.time = null; // Reset selección
+        reservationState.time = null;
         document.getElementById('submit-btn').disabled = true;
 
         if(!dateVal || !reservationState.sector) {
@@ -526,32 +535,26 @@
             return;
         }
 
-        // Generar slots simulados
-        generateTimeSlots(gridContainer);
+        generateTimeSlots(gridContainer, dateVal, reservationState.sector);
     }
 
-    // Generar botones de hora con disponibilidad aleatoria (SIMULACIÓN)
-    function generateTimeSlots(container) {
+    function generateTimeSlots(container, date, sector) {
         container.innerHTML = '';
         
-        // Para simular realidad, usamos la fecha y sector para "crear" un seed aleatorio
-        // Así si vuelven a elegir lo mismo, da el mismo resultado (consistencia visual)
-        
         timeSlots.forEach(time => {
-            // Simulamos disponibilidad: Random entre 0 y 9 mesas libres
-            // En un sistema real, esto vendría de una base de datos
-            const mockAvailability = Math.floor(Math.random() * 10); // 0 a 9
+            // CONSULTAMOS LOCALSTORAGE PARA VER REALMENTE CUANTOS LUGARES QUEDAN
+            const spotsLeft = getRemainingSpots(date, sector, time);
             
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'time-slot micro-btn';
             
-            if (mockAvailability === 0) {
+            if (spotsLeft === 0) {
                 btn.classList.add('disabled');
                 btn.innerHTML = `${time}<span class="spots-left full">AGOTADO</span>`;
                 btn.disabled = true;
             } else {
-                btn.innerHTML = `${time}<span class="spots-left">${mockAvailability} mesas lib.</span>`;
+                btn.innerHTML = `${time}<span class="spots-left">${spotsLeft} mesas lib.</span>`;
                 btn.onclick = () => selectTime(time, btn);
             }
             container.appendChild(btn);
@@ -578,22 +581,68 @@
         }
     }
 
-    function sendToWhatsapp() {
+    // --- FUNCIÓN FINAL: PDF + LOCALSTORAGE + WHATSAPP ---
+    async function finalizeReservation() {
         const n = document.getElementById('nombre-input').value;
         const f = reservationState.date;
         const s = reservationState.sector;
         const t = reservationState.time;
         const p = reservationState.people;
 
-        const msg = `*HOLA ANTARES! QUIERO RESERVAR* 🍻%0A%0A👤 *Nombre:* ${n}%0A👥 *Personas:* ${p}%0A📅 *Fecha:* ${f}%0A📍 *Sector:* ${s}%0A⏰ *Hora:* ${t}`;
+        // 1. GUARDAR EN MEMORIA LOCAL (Ocupar lugar)
+        bookSpot(f, s, t);
+
+        // 2. GENERAR PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
         
-        window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=${msg}`, '_blank');
+        // Estilos PDF simples
+        doc.setFillColor(10, 10, 11); // Fondo oscuro simulado con rect negro
+        doc.rect(0, 0, 210, 297, 'F');
+        
+        doc.setTextColor(212, 175, 55); // Dorado
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.text("COMPROBANTE DE RESERVA", 105, 30, null, null, "center");
+        doc.text("ANTARES CAMPANA", 105, 45, null, null, "center");
+        
+        doc.setDrawColor(212, 175, 55);
+        doc.line(20, 55, 190, 55);
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "normal");
+        
+        let y = 80;
+        doc.text(`Titular: ${n}`, 30, y); y+=15;
+        doc.text(`Fecha: ${f}`, 30, y); y+=15;
+        doc.text(`Hora: ${t} hs`, 30, y); y+=15;
+        doc.text(`Sector: ${s}`, 30, y); y+=15;
+        doc.text(`Personas: ${p}`, 30, y); y+=20;
+
+        doc.setTextColor(150, 150, 150);
+        doc.setFontSize(10);
+        doc.text("Presente este comprobante al ingresar.", 105, y, null, null, "center");
+        doc.text("Reservas válidas con 15 min de tolerancia.", 105, y+10, null, null, "center");
+
+        // Guardar PDF
+        doc.save(`Reserva_Antares_${n.replace(/\s/g, '_')}.pdf`);
+
+        // 3. ACTUALIZAR VISUALMENTE LA GRILLA (Para mostrar que bajó el cupo inmediatamente)
+        resetAvailability(); 
+
+        // 4. ENVIAR A WHATSAPP
+        setTimeout(() => {
+            const msg = `*HOLA ANTARES! NUEVA RESERVA* 🍻%0A%0A👤 *Nombre:* ${n}%0A👥 *Personas:* ${p}%0A📅 *Fecha:* ${f}%0A📍 *Sector:* ${s}%0A⏰ *Hora:* ${t}%0A%0A_El cliente ya descargó su comprobante PDF._`;
+            window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=${msg}`, '_blank');
+        }, 1500); // Pequeño delay para asegurar que la descarga del PDF inicie
     }
 
     window.onload = () => { loadBeers(); updateStatus(); setInterval(updateStatus, 1000); };
   </script>
 </body>
 </html>
+
 
 
 
