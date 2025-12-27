@@ -88,7 +88,6 @@
       justify-content: center; flex-direction: column; gap: 10px; transform: scale(1.2);
     }
 
-    /* ESTADO FINAL: Ajustado para no chocar con los botones superiores en móviles */
     header.merged-top {
       top: 75px; height: 50px; padding: 0; 
       background: transparent; border: none;
@@ -142,11 +141,81 @@
     .tech-label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 5px; }
     .tech-value { font-size: 1.2rem; color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-    /* --- FORMULARIO --- */
-    .form-wrapper { background: rgba(0,0,0,0.8); padding: 3rem; border-radius: 20px; border: 1px solid var(--border); max-width: 800px; margin: 4rem auto; }
-    .form-inputs { display: grid; gap: 15px; }
-    input, select { width: 100%; padding: 1rem; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; }
-    .btn-submit { padding: 1rem; background: var(--gold); border: none; border-radius: 50px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; }
+    /* --- FORMULARIO NUEVO VISUAL --- */
+    .form-wrapper { 
+        background: rgba(10, 10, 11, 0.95); 
+        padding: 2.5rem; 
+        border-radius: 25px; 
+        border: 1px solid var(--border); 
+        max-width: 900px; 
+        margin: 4rem auto; 
+        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+
+    .form-section-title {
+        color: var(--gold); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; 
+        letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;
+    }
+
+    /* Personas Counter */
+    .counter-control {
+        display: flex; align-items: center; justify-content: center; gap: 20px;
+        background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+    .btn-count {
+        width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--gold);
+        background: transparent; color: var(--gold); font-size: 1.5rem; display: flex; 
+        align-items: center; justify-content: center; transition: 0.2s;
+    }
+    .btn-count:hover { background: var(--gold); color: #000; }
+    #people-display { font-size: 2rem; font-family: 'Playfair Display'; font-weight: 700; min-width: 40px; text-align: center; }
+
+    /* Date & Name Inputs */
+    .input-group { margin-bottom: 2rem; }
+    .custom-input { 
+        width: 100%; padding: 15px; background: rgba(255,255,255,0.05); 
+        border: 1px solid #444; border-radius: 10px; color: #fff; font-family: 'Plus Jakarta Sans';
+        font-size: 1rem; outline: none; transition: 0.3s;
+    }
+    .custom-input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
+
+    /* Sectors Grid */
+    .sector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 2rem; }
+    .sector-card {
+        padding: 15px; border: 1px solid #444; border-radius: 12px;
+        text-align: center; transition: 0.3s; background: rgba(255,255,255,0.02);
+        display: flex; flex-direction: column; gap: 5px;
+    }
+    .sector-card:hover { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+    .sector-card.selected { background: var(--gold); border-color: var(--gold); color: #000; }
+    .sector-card h4 { font-weight: 800; font-size: 0.9rem; }
+    .sector-card p { font-size: 0.7rem; opacity: 0.7; }
+    .sector-card.selected p { opacity: 1; color: #000; font-weight: 700; }
+
+    /* Time Grid */
+    .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-bottom: 2rem; }
+    .time-slot {
+        padding: 10px 5px; border-radius: 8px; border: 1px solid #444;
+        background: transparent; color: #ccc; font-size: 0.85rem; font-weight: 600;
+        transition: 0.3s; text-align: center; position: relative; overflow: hidden;
+    }
+    .time-slot:not(.disabled):hover { border-color: var(--gold); color: var(--gold); }
+    .time-slot.selected { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 800; }
+    .time-slot.disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; background: #1a1a1a; }
+    .spots-left { font-size: 0.6rem; display: block; margin-top: 3px; }
+    .spots-left.full { color: var(--error); }
+    .time-slot.selected .spots-left { color: #000; }
+
+    /* Submit Button */
+    .btn-submit { 
+        padding: 1.2rem; background: var(--gold); border: none; border-radius: 50px; 
+        font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; font-size: 1rem;
+        letter-spacing: 1px; transition: 0.3s;
+    }
+    .btn-submit:disabled { background: #444; color: #888; cursor: not-allowed; }
+    .btn-submit:not(:disabled):hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(212,175,55,0.3); }
+
 
     /* --- BOTTOM DOCK --- */
     .bottom-dock { 
@@ -224,17 +293,51 @@
   </section>
 
   <div class="form-wrapper">
-    <h2 style="text-align:center; font-family:'Playfair Display'; color:var(--gold); margin-bottom:2rem;">Reserva de Mesa</h2>
-    <form id="reserva-form" class="form-inputs">
-      <input type="text" id="nombre" placeholder="Nombre y Apellido" required>
-      <input type="date" id="fecha" required>
-      <select id="ubicacion" required>
-        <option value="" disabled selected>Selecciona tu ubicación...</option>
-        <option value="Patio Frente">🍻 Patio Frente</option>
-        <option value="Patio Trasero">🌳 Patio Trasero</option>
-        <option value="Salón Interior">🏠 Salón Interior</option>
-      </select>
-      <button type="submit" class="btn-submit micro-btn">CONFIRMAR POR WHATSAPP 📲</button>
+    <h2 style="text-align:center; font-family:'Playfair Display'; color:var(--gold); margin-bottom:0.5rem; font-size: 2.5rem;">Reserva tu Mesa</h2>
+    <p style="text-align:center; color:#888; margin-bottom:2rem; font-size:0.9rem;">Consulta disponibilidad en tiempo real</p>
+    
+    <form id="reserva-form" onsubmit="return false;">
+      
+      <div class="form-section-title">1. ¿CUÁNTOS SON?</div>
+      <div class="counter-control">
+        <button type="button" class="btn-count micro-btn" onclick="updatePeople(-1)">-</button>
+        <div id="people-display">2</div>
+        <button type="button" class="btn-count micro-btn" onclick="updatePeople(1)">+</button>
+      </div>
+
+      <div class="form-section-title">2. TUS DATOS</div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <input type="text" id="nombre-input" class="custom-input" placeholder="Nombre y Apellido" required oninput="checkFormValidity()">
+          <input type="date" id="fecha-input" class="custom-input" required onchange="resetAvailability(); checkFormValidity()">
+      </div>
+      <div style="margin-bottom: 2rem;"></div>
+
+      <div class="form-section-title">3. ELIGE TU SECTOR (9 Mesas por sector)</div>
+      <div class="sector-grid">
+        <div class="sector-card micro-btn" onclick="selectSector('Patio Frente', this)">
+            <h4>🍻 Patio Frente</h4>
+            <p>Vista a la calle</p>
+        </div>
+        <div class="sector-card micro-btn" onclick="selectSector('Patio Trasero', this)">
+            <h4>🌳 Patio Trasero</h4>
+            <p>Aire libre y tranquilo</p>
+        </div>
+        <div class="sector-card micro-btn" onclick="selectSector('Salón Interior', this)">
+            <h4>🏠 Salón Interior</h4>
+            <p>Climatizado y música</p>
+        </div>
+      </div>
+
+      <div class="form-section-title">4. SELECCIONA HORARIO DISPONIBLE</div>
+      <div id="time-grid-container" class="time-grid">
+          <p style="grid-column: 1/-1; text-align: center; color: #555; padding: 20px;">
+              Primero selecciona una fecha y un sector para ver disponibilidad.
+          </p>
+      </div>
+
+      <button type="button" id="submit-btn" class="btn-submit micro-btn" disabled onclick="sendToWhatsapp()">
+          COMPLETAR RESERVA 📲
+      </button>
     </form>
   </div>
 
@@ -376,18 +479,122 @@
       else { a.pause(); btn.innerText = "SOUND OFF"; }
     }
 
-    document.getElementById('reserva-form').onsubmit = (e) => {
-      e.preventDefault();
-      const n = document.getElementById('nombre').value;
-      const f = document.getElementById('fecha').value;
-      const u = document.getElementById('ubicacion').value;
-      window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=Reserva: ${n}, ${f}, ${u}`, '_blank');
+    /* --- LÓGICA DE RESERVAS --- */
+    
+    let reservationState = {
+        people: 2,
+        sector: null,
+        date: null,
+        time: null
+    };
+
+    const timeSlots = ["16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30"];
+    
+    // Función para manejar cantidad de personas
+    function updatePeople(change) {
+        let newVal = reservationState.people + change;
+        if (newVal < 1) newVal = 1;
+        if (newVal > 20) newVal = 20; // Límite razonable
+        reservationState.people = newVal;
+        document.getElementById('people-display').innerText = newVal;
+        checkFormValidity();
+    }
+
+    // Al cambiar sector
+    function selectSector(sectorName, element) {
+        // Estilos
+        document.querySelectorAll('.sector-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
+        
+        // Estado
+        reservationState.sector = sectorName;
+        resetAvailability();
+        checkFormValidity();
+    }
+
+    // Resetear horarios cuando cambia fecha o sector
+    function resetAvailability() {
+        const dateVal = document.getElementById('fecha-input').value;
+        const gridContainer = document.getElementById('time-grid-container');
+        
+        reservationState.date = dateVal;
+        reservationState.time = null; // Reset selección
+        document.getElementById('submit-btn').disabled = true;
+
+        if(!dateVal || !reservationState.sector) {
+            gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #555; padding: 20px;">Selecciona fecha y sector.</p>';
+            return;
+        }
+
+        // Generar slots simulados
+        generateTimeSlots(gridContainer);
+    }
+
+    // Generar botones de hora con disponibilidad aleatoria (SIMULACIÓN)
+    function generateTimeSlots(container) {
+        container.innerHTML = '';
+        
+        // Para simular realidad, usamos la fecha y sector para "crear" un seed aleatorio
+        // Así si vuelven a elegir lo mismo, da el mismo resultado (consistencia visual)
+        
+        timeSlots.forEach(time => {
+            // Simulamos disponibilidad: Random entre 0 y 9 mesas libres
+            // En un sistema real, esto vendría de una base de datos
+            const mockAvailability = Math.floor(Math.random() * 10); // 0 a 9
+            
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'time-slot micro-btn';
+            
+            if (mockAvailability === 0) {
+                btn.classList.add('disabled');
+                btn.innerHTML = `${time}<span class="spots-left full">AGOTADO</span>`;
+                btn.disabled = true;
+            } else {
+                btn.innerHTML = `${time}<span class="spots-left">${mockAvailability} mesas lib.</span>`;
+                btn.onclick = () => selectTime(time, btn);
+            }
+            container.appendChild(btn);
+        });
+    }
+
+    function selectTime(time, btnElement) {
+        document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
+        btnElement.classList.add('selected');
+        reservationState.time = time;
+        checkFormValidity();
+    }
+
+    function checkFormValidity() {
+        const name = document.getElementById('nombre-input').value;
+        const btn = document.getElementById('submit-btn');
+        
+        if(name && reservationState.people && reservationState.date && reservationState.sector && reservationState.time) {
+            btn.disabled = false;
+            btn.style.opacity = "1";
+        } else {
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+        }
+    }
+
+    function sendToWhatsapp() {
+        const n = document.getElementById('nombre-input').value;
+        const f = reservationState.date;
+        const s = reservationState.sector;
+        const t = reservationState.time;
+        const p = reservationState.people;
+
+        const msg = `*HOLA ANTARES! QUIERO RESERVAR* 🍻%0A%0A👤 *Nombre:* ${n}%0A👥 *Personas:* ${p}%0A📅 *Fecha:* ${f}%0A📍 *Sector:* ${s}%0A⏰ *Hora:* ${t}`;
+        
+        window.open(`https://api.whatsapp.com/send?phone=+543489483690&text=${msg}`, '_blank');
     }
 
     window.onload = () => { loadBeers(); updateStatus(); setInterval(updateStatus, 1000); };
   </script>
 </body>
 </html>
+
 
 
 
